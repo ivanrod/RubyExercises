@@ -8,6 +8,7 @@ discount: Float
 
 class ShoppingCart
     attr_accessor :bill, :discounts
+    
     def initialize(items,loyalCustomer,day)
     	@items = items
 		@loyalCustomer = loyalCustomer
