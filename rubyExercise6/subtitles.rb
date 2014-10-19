@@ -10,12 +10,15 @@ readSub("/home/ivan/Documentos/ProgramaGeneration/Week 7/onlineExercices/rubyExe
 inputfile: string --> route of the input file
 shift: int --> shift in milisecons (positive or negative)
 =end
-def readSub(inputFile, shift)
+def shiftSub(inputFile, shift)
 	shift = shift /1000.0
 	text = File.open(inputFile).read
+	puts "Please, write the name of the new subtitles..."
+	newName = gets.chomp + ".srt"
+	newFile = File.new(newName,"w")
 	text.each_line do |line|
 		if line[2] == ":" && line[5] == ":"
-			puts line
+			#puts line
 			subSeconds1 = [line[(0..1)].to_f*3600, line[(3..4)].to_f*60, (line[(6..11)].gsub(",",".")).to_f].reduce(:+)	+ shift		
 			subSeconds2 = [line[(17..18)].to_f*3600, line[(20..21)].to_f*60, (line[(23..28)].gsub(",",".")).to_f].reduce(:+) + shift
 
@@ -29,18 +32,16 @@ def readSub(inputFile, shift)
 			line[(17..18)] = toStr(subSeconds2[0],2)
 			line[(20..21)] = toStr(subSeconds2[1],2)
 			line[(23..28)] = toStr(subSeconds2[2],6).gsub(".",",")
-			puts line
-
-
+			#puts line
+			newFile.puts(line)
+		else
+			newFile.puts(line)
 		end
 	end
+	newFile.close
+	puts newName + " created at " + Time.now.to_s
 	return nil
 end
-
-=begin
-Para los profanity pasar a un array todas las palabras prohibidas
-Luego decir que si la linea contiene alguna palabra del array la sustituya
-=end
 
 =begin 
 toStr function --> Transform a number to string and adds a 0 at the begining of the string if the string is shorter than leng
@@ -64,6 +65,22 @@ end
 
 # -----Part 2------
 
+def writeTypos(inputFile)
+	puts "Processing... Please, wait..."
+	pt = potentialTypos(inputFile)
+	puts "Please, enter the name of the new SRT file..."
+	newName = gets.chomp + ".srt"
+	newFile = File.new(newName,"w")
+	for i in pt.keys
+		newLine = ""
+		pt[i].each do |add|
+			newLine += add + " , "
+		end
+		newFile.puts(i + ": " + newLine)
+	end
+	newFile.close
+	puts newName +  "created at: " + Time.now.to_s
+end
 
 
 def potentialTypos(inputFile)
@@ -84,9 +101,9 @@ def potentialTypos(inputFile)
 		end
 		if counter > 2
 			#/\W|\d/ regular expresion to exclude non digit and non letter
-			words = line.downcase.split(/\W|\d/)
+			words = line.split(/\W|\d/)
 			for i in words
-				if !(arrWords.include? i) && i != ""
+				if !(arrWords.include? i.downcase) && i != ""
 					if potTypos.include? i
 						potTypos[i].push(prevLine[(0..11)])
 					else
@@ -95,8 +112,6 @@ def potentialTypos(inputFile)
 				end
 			end
 		end
-
-		
 	end
 	return potTypos
 end
@@ -115,6 +130,9 @@ end
 
 
 def profanity(inputFile)
+	puts "Please, enter the name of the censored file..."
+	newName = gets.chomp + ".srt"
+	newFile = File.new(newName, "w")
 	text = File.open(inputFile).read
 	arrWords = bannedWords("./swearWords.txt")
 	counter = 0
@@ -130,15 +148,17 @@ def profanity(inputFile)
 		end
 		if counter > 2 && protect == true
 			#/\W|\d/ regular expresion to exclude non digit and non letter
-			words = line.downcase.split(/\W|\d/)
+			words = line.split(/\W|\d/)
 			for i in words
-				if arrWords.include?(i) && i != ""
-					puts line
-					puts i
+				if arrWords.include?(i.downcase) && i != ""
+					line = line.gsub(i, "CENSORED")
 				end
 			end
 		end
+		newFile.puts(line)
 	end
+	newFile.close
+	puts newName + " created at: " + Time.now.to_s
 	return nil
 end
 
