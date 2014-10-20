@@ -21,7 +21,6 @@ class ShoppingCart
 
 	end
 	def discount()
-		#/Algo Falla aquí dá nil/
 		for i in @items
             i.discount(@day)
 			@discounts += i.discounts

@@ -1,7 +1,9 @@
 
 =begin
-require("/home/ivan/Documentos/ProgramaGeneration/Week 7/onlineExercices/rubyExercise6/subtitles.rb")
-readSub("/home/ivan/Documentos/ProgramaGeneration/Week 7/onlineExercices/rubyExercise6/gotSub.srt",2500)
+	class SubsMod
+	Modify your subtitles in SRT format
+
+	@inputfile: string  --> name of the SRT file
 =end
 
 class SubsMod
@@ -9,11 +11,13 @@ class SubsMod
 		@inputFile = File.open(inputFile)
 	end
 
-# -----Part 1------
+	# -----Part 1------
 
 =begin
-inputfile: string --> route of the input file
-shift: int --> shift in milisecons (positive or negative)
+	shiftSub method
+	Shifts the subtitles time in a new SRT file
+
+	shift: int --> shift in MILISECONDS (positive or negative)
 =end
 	def shiftSub(shift)
 		shift = shift /1000.0
@@ -23,7 +27,6 @@ shift: int --> shift in milisecons (positive or negative)
 		newFile = File.new(newName,"w")
 		text.each_line do |line|
 			if line[2] == ":" && line[5] == ":"
-				#puts line
 				subSeconds1 = [line[(0..1)].to_f*3600, line[(3..4)].to_f*60, (line[(6..11)].gsub(",",".")).to_f].reduce(:+)	+ shift		
 				subSeconds2 = [line[(17..18)].to_f*3600, line[(20..21)].to_f*60, (line[(23..28)].gsub(",",".")).to_f].reduce(:+) + shift
 
@@ -37,7 +40,6 @@ shift: int --> shift in milisecons (positive or negative)
 				line[(17..18)] = toStr(subSeconds2[0],2)
 				line[(20..21)] = toStr(subSeconds2[1],2)
 				line[(23..28)] = toStr(subSeconds2[2],6).gsub(".",",")
-				#puts line
 				newFile.puts(line)
 			else
 				newFile.puts(line)
@@ -49,7 +51,9 @@ shift: int --> shift in milisecons (positive or negative)
 	end
 
 =begin 
-	toStr function --> Transform a number to string and adds a 0 at the begining of the string if the string is shorter than leng
+	toStr method
+	Transform a number to string and adds 0s to the string if the string is shorter than leng
+
 	n: int --> number to add 0
 	leng: int --> suposed length to the string
 =end
@@ -69,7 +73,10 @@ shift: int --> shift in milisecons (positive or negative)
 
 
 	# -----Part 2------
-
+=begin
+	writeTypos method
+	Write possible typos in a new file
+=end
 	def writeTypos
 		puts "Processing... Please, wait..."
 		pt = self.potentialTypos
@@ -87,7 +94,10 @@ shift: int --> shift in milisecons (positive or negative)
 		puts newName +  " created at: " + Time.now.to_s
 	end
 
-
+=begin 
+	potentialTypos method
+	Reads the words file and commpare it with the input file to obtain potential Typos
+=end
 	def potentialTypos
 		text = @inputFile.read
 		arrWords = unixWords("/usr/share/dict/words")
@@ -121,6 +131,13 @@ shift: int --> shift in milisecons (positive or negative)
 		return potTypos
 	end
 
+=begin 
+	unixWords method
+	Reads a words file and transform it to an array
+
+	inputFile: string  --> words file
+=end
+
 	def unixWords(inputFile)
 		text = File.open(inputFile).read
 		words = []
@@ -133,7 +150,10 @@ shift: int --> shift in milisecons (positive or negative)
 
 	# -----Part 3------
 
-
+=begin 
+	profanity method
+	Creates a new SRT file where swear words will be censored until minute 30
+=end
 	def profanity
 		puts "Please, enter the name of the censored file..."
 		newName = gets.chomp + ".srt"
@@ -153,7 +173,7 @@ shift: int --> shift in milisecons (positive or negative)
 				counter = 0
 			end
 			if counter == 2  && line[(3..4)].to_i >= 30 && line[(20..21)].to_i >= 30
-				#if its protected time
+				#if it's not protected time
 				protect = false
 			end
 			if counter > 2 && protect == true
@@ -172,7 +192,12 @@ shift: int --> shift in milisecons (positive or negative)
 		return nil
 	end
 
+=begin 
+	bannedWords method
+	Reads a words file an turns it into an array omitting \r\n expressions
 
+	inputFile: string --> file with words
+=end
 	def bannedWords(inputFile)
 		text = File.open(inputFile).read
 		words = []
