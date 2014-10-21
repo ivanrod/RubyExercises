@@ -1,0 +1,10 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    artii (2.0.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  artii
