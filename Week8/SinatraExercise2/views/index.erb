@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>List of songs</title>
+</head>
+<body>
+	<section>
+		<ul>
+		 <% @songs.each do |song| %>
+		 <li>Artist: <%= song.artist %> Song: <%= song.name %></li>
+		 <% end %>
+		 </ul>
+		 <a href="./songs">Redirect</a>
+	</section>
+</body>
+</html>
