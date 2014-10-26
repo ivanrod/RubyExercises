@@ -3,23 +3,24 @@
 <head>
 	<meta charset="UTF-8">
 	<title>MiniMDB</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="./css/index.css">
+
+    <script src="./js/jquery-2.1.1.min.js"></script>
 	<script src="./js/asyncJsonDownload.js"></script>
 	<script src="./js/miniMdb.js" defer></script>
 </head>
 <body>
 	<section>
-		<form action="/list" method="POST">
-			Name: <input id="input2" type="text" name="showName" value="orange"/>
-			Type: <select name="showType" id="show">
-					<option value="tvShow">TV Show</option>
-					<option value="movie">Movie</option>
-				</select>
-				<%= erb :partialIndex %>
-				
-		<input type="submit" value="Add" />
-		</form>
+		<%= erb :partialIndex %>
 	</section>
 	<button>Search</button>
+	<section>
+		<ul>
+			<% for i in @selectedShows.keys %>
+			<li class="<%= @selectedShows[i][4] %>"><p>Title: <%= @selectedShows[i][0] %><br>Rating: <%= @selectedShows[i][1] %><br>Cover url: <%= @selectedShows[i][2] %> <br> Imdb url: <%= @selectedShows[i][3] %></p></li>
+			<% end %>
+		</ul>
+	</section>
 </body>
 </html>

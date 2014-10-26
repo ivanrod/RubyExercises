@@ -1,1 +1,7 @@
-<input  id="input1" type="text" value="<%= @showJson %>">
+<form action="/show" method="POST">
+	Search: <input id="input2" type="text" name="showName" value="Enter to search..."/>
+	Name: <select name="showType" id="show">
+			<option class="showList" value="0">Shows</option>
+		</select>
+	<input type="submit" value="Add" />
+</form>
