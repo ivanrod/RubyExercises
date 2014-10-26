@@ -3,18 +3,23 @@
 <head>
 	<meta charset="UTF-8">
 	<title>MiniMDB</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="./js/asyncJsonDownload.js"></script>
+	<script src="./js/miniMdb.js" defer></script>
 </head>
 <body>
 	<section>
-		<form action="/" method="POST">
-			Name: <input type="text" name="showName" />
+		<form action="/list" method="POST">
+			Name: <input id="input2" type="text" name="showName" value="orange"/>
 			Type: <select name="showType" id="show">
 					<option value="tvShow">TV Show</option>
 					<option value="movie">Movie</option>
 				</select>
-				<button>Search</button>
+				<%= erb :partialIndex %>
+				
 		<input type="submit" value="Add" />
 		</form>
 	</section>
+	<button>Search</button>
 </body>
 </html>
