@@ -1,16 +1,14 @@
-document.getElementsByTagName('button')[0].addEventListener('click',createList);
+document.getElementsByTagName('button')[0].addEventListener('click',getPost);
 
 function getPost(){
 
-	$.post( "/list2", document.getElementById('input2').value );
-	$.ajaxSetup({
-		//PREGUNTAR seria correcto hacer async el post y sync el get?
-	  async: false,
+	$.post( "/list2", document.getElementById('input2').value, function(){
+		var response = $.getJSON( "/list2", function(data){
+			createList(data);
+		});
 	});
-	var response = $.get( "/list2");
-	
 	//document.getElementById('input1').value=response.responseText;
-	return response.responseText
+	//return response.responseText
 }
 
 function deleteList(){
@@ -21,9 +19,9 @@ function deleteList(){
 	};
 }
 
-function createList(){
+function createList(newList){
 	deleteList();
-	newList = JSON.parse(getPost());
+
 	for (i=0; i < newList.showList.length; i++){
 		option = document.createElement('option');
 		option.className = "showList";
